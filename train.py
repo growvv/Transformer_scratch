@@ -12,7 +12,7 @@ import ipdb
 
 
 # Tensorboard to get nice loss plot
-writer = SummaryWriter("runs/loss_plot4")
+writer = SummaryWriter("runs/loss_plot")
 step = 0
 
 model = Transformer(
@@ -93,7 +93,7 @@ for epoch in range(config.num_epochs):
             print(epoch, batch_idx, loss.item())
         writer.add_scalar("Training loss", loss, global_step=step)
         # writer.add_graph(model, [src, target])
-        writer.add_histogram("weight", model.decoder.layers[2].attn.atten ,step)
+        # writer.add_histogram("weight", model.decoder.layers[2].attn.atten ,step)
 
         step += 1
 

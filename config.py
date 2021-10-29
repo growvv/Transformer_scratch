@@ -28,7 +28,7 @@ trg_pad_idx = 0
 # dataset
 file_root = "./numbers.csv"
 # save model
-model_root = "my_checkpoint2.pth.tar"
+model_root = "my_checkpoint.pth.tar"
 
 # generate_data
 entry_num = 100
