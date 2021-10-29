@@ -56,7 +56,6 @@ class Transformer(nn.Module):
 
         self.fc_out = nn.Linear(embed_size, trg_vocab_size)
         self.dropout = nn.Dropout(dropout)
-        # ipdb.set_trace()
 
     def make_src_mask(self, src):
         src_mask = (src != self.src_pad_idx).unsqueeze(1)
@@ -90,7 +89,6 @@ class Transformer(nn.Module):
         src_mask = self.make_src_mask(src)
         trg_mask = self.make_trg_mask(trg)
         # encoder部分
-        # ipdb.set_trace()
         x = self.dropout(
             self.src_word_embedding(src) + self.src_position_embedding(src_positions)
         )

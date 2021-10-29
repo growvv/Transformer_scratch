@@ -1,6 +1,9 @@
 import torch
 import sys
 import ipdb
+import config
+import matplotlib.pyplot as plt
+# import seaborn
 
 
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
@@ -24,13 +27,24 @@ def my_predict(model, device, max_lenght):
         with torch.no_grad():
             output = model(sentence_tensor, trg_tensor)
 
-        # ipdb.set_trace()
         best_guess = output.argmax(2)[:, -1].item()
         outputs.append(best_guess)
-        print("best_guess: ", best_guess)
+        # print("best_guess: ", best_guess)
 
         if best_guess == 0:
             break
 
     return outputs
 
+
+def draw_atten(attention):
+    plt.figure(1)
+    atten = attention[0][0]
+    print(atten)
+    # plt.plot(atten)
+    # plt.show()
+
+
+if __name__ == "__main__":
+    x = torch.randint(0,10, (1,8,5,5))
+    draw_atten(x)

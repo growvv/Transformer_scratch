@@ -14,7 +14,6 @@ class DecoderBlock(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, value, key, src_mask, trg_mask):
-        # ipdb.set_trace()
         attn = self.attn(x, x, x, trg_mask)
         query = self.dropout(self.norm(attn+x))
         out = self.attn(query, value, key, src_mask)
