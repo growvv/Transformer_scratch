@@ -16,7 +16,7 @@ class DecoderBlock(nn.Module):
     def forward(self, x, value, key, src_mask, trg_mask):
         attn = self.attn(x, x, x, trg_mask)
         query = self.dropout(self.norm(attn+x))
-        out = self.attn(query, value, key, src_mask)
+        out = self.transformer(query, value, key, src_mask)
         return out
 
 
@@ -37,7 +37,6 @@ class Decoder(nn.Module):
             ]
             
         )
-        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, encoder_out, src_mask, trg_mask):
         for layer in self.layers:

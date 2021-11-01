@@ -18,7 +18,7 @@ class Transformer(nn.Module):
         num_decoder_layers=6,
         forward_expansion=4,
         heads=8,
-        dropout=0,
+        dropout=0.1,
         max_length=100,  
         device="cpu",  
     ):
@@ -67,6 +67,7 @@ class Transformer(nn.Module):
         trg_mask = torch.tril(torch.ones((trg_len, trg_len))).expand(
             N, trg_len, trg_len
         )
+        return trg_mask.to(self.device)
 
     def forward(self, src, trg):
         # ipdb.set_trace()
@@ -115,7 +116,7 @@ if __name__ == "__main__":
         num_decoder_layers=6,
         forward_expansion=4,
         heads=8,
-        dropout=0,
+        dropout=0.1,
         device="cpu",
         max_length=100,
     )

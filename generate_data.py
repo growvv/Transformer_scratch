@@ -23,5 +23,4 @@ with open(config.file_root, 'w', encoding='UTF8') as f:
         data[1] = [i for i in range(s+len, s+2*len)]
         writer.writerow(data)
 
-
         

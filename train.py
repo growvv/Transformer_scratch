@@ -9,11 +9,8 @@ from seq_dataset import SeqDataset
 from torch.utils.data import DataLoader
 import config
 import ipdb
+import time
 
-
-# Tensorboard to get nice loss plot
-writer = SummaryWriter("runs/loss_plot")
-step = 0
 
 model = Transformer(
     config.src_vocab_size,
@@ -45,18 +42,16 @@ if config.load_model:
 
 dataset = SeqDataset(config.file_root, max_length=config.max_length)
 train_iterator = DataLoader(dataset, batch_size=config.batch_size,
-                        shuffle=False, num_workers=0,  collate_fn=None)
+                        shuffle=True, num_workers=0,  collate_fn=None)
+
+# Tensorboard to get nice loss plot
+writer = SummaryWriter("runs/loss_plot")
+global_step = 0
+log_step = 1
+tic_train = time.time()
 
 for epoch in range(config.num_epochs):
     print(f"[Epoch {epoch} / {config.num_epochs}]")
-
-    if config.save_model:
-        checkpoint = {
-            "state_dict": model.state_dict(),
-            "optimizer": optimizer.state_dict(),
-        }
-        save_checkpoint(checkpoint, filename=config.model_root)
-
 
     # 训练
     model.train()
@@ -64,6 +59,8 @@ for epoch in range(config.num_epochs):
 
     for batch_idx, batch in enumerate(train_iterator):
         # Get input and targets and get to cuda
+        if batch_idx == 3:
+            break
         src, trg = batch
         src = src.to(config.device)
         trg = trg.to(config.device)
@@ -71,6 +68,9 @@ for epoch in range(config.num_epochs):
 
         # Forward prop
         output = model(src, trg)
+        # ipdb.set_trace()
+        # best_guess = output.argmax(2)
+        # print(best_guess.shape)
 
         optimizer.zero_grad()
 
@@ -88,18 +88,25 @@ for epoch in range(config.num_epochs):
         # Gradient descent step
         optimizer.step()
 
-        # plot to tensorboard
-        if batch_idx % 10 == 0:
-            print(epoch, batch_idx, loss.item())
-        writer.add_scalar("Training loss", loss, global_step=step)
+        global_step += 1
+        if global_step % log_step == 0:
+            print("global step %d, epoch: %d, batch: %d, loss: %.5f, speed: %.2f step/s"
+                    % (global_step, epoch, batch_idx, loss, global_step / (time.time() - tic_train), 
+                ))
+        writer.add_scalar("Training loss", loss, global_step=global_step)
         # writer.add_graph(model, [src, target])
         # writer.add_histogram("weight", model.decoder.layers[2].attn.atten ,step)
-
-        step += 1
 
     # ipdb.set_trace()
     mean_loss = sum(losses) / len(losses)
     scheduler.step(mean_loss)
+
+    if config.save_model:
+        checkpoint = {
+            "state_dict": model.state_dict(),
+            "optimizer": optimizer.state_dict(),
+        }
+        save_checkpoint(checkpoint, filename=config.model_root)
 
     # 评估
     model.eval()
@@ -109,7 +116,7 @@ for epoch in range(config.num_epochs):
     # print(f"Translated example sentence: \n {translated_sentence}")
 
     # 可用于attention可视化
-    print(model.encoder.layers[2].attn.atten.shape)
+    # print(model.encoder.layers[2].attn.atten.shape)
     # draw_atten(model.encoder.layers[2].attn.atten)
 
 print("finish!!")

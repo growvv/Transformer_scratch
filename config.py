@@ -3,13 +3,13 @@ import torch
 # We're ready to define everything we need for training our Seq2Seq model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-load_model = False
+load_model = True
 save_model = False
 
 # Training hyperparameters
-num_epochs = 100
+num_epochs = 10
 learning_rate = 3e-4
-batch_size = 4
+batch_size = 32
 
 
 # Model hyperparameters
@@ -28,8 +28,8 @@ trg_pad_idx = 0
 # dataset
 file_root = "./numbers.csv"
 # save model
-model_root = "my_checkpoint.pth.tar"
+model_root = "my_checkpoint2.pth.tar"
 
 # generate_data
-entry_num = 100
+entry_num = 10000
 

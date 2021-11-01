@@ -42,7 +42,6 @@ class Encoder(nn.Module):
                 for _ in range(num_layers)
             ]
         )
-        self.dropout = nn.Dropout(dropout)
     
     def forward(self, x, mask):
         # ipdb.set_trace()
