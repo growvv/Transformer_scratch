@@ -1,6 +1,8 @@
 ## Pytorch Transformers from Scratch
+详解 https://www.cnblogs.com/lfri/p/15484030.html
 
-1. fix dropout
-2. fix .to(device)
-3. update github repo
-4. packge checkpoint and runs by Ali-Drive
+## To do
+- [x] fix dropout
+- [x] fix .to(device)
+- [x] update github repo
+- [ ] packge checkpoint and runs by Ali-Drive
