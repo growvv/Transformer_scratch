@@ -28,10 +28,10 @@ import config
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 load_model = False
-save_model = False
+save_model = True
 
 # Training hyperparameters
-num_epochs = 100
+num_epochs = 10
 learning_rate = 3e-4
 batch_size = 4
 
